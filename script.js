@@ -8,8 +8,20 @@ flipBtn.setAttribute("disabled", "");
 const startWebcam = function () {
     const video = document.getElementById('video')
         // vendorUrl = window.URL || window.webkitURL;
+    const constraints = {
+        video: null,
+    };
+    
+    if (video.value == "environment") {
+        constraints.video = {
+            facingMode: { exact: "environment" }
+        }        
+    } else {
+        constraints.video = { facingMode: "user" }        
+    };
+
     if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true, facingMode: "environment"})
+        navigator.mediaDevices.getUserMedia(constraints)
             .then(function (stream) {
                 if ('srcObject' in video) {
                     video.srcObject = stream;
