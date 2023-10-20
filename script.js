@@ -6,8 +6,8 @@ flipBtn.setAttribute("disabled", "");
 
 
 const startWebcam = function () {
-    const video = document.getElementById('video'),
-        vendorUrl = window.URL || window.webkitURL;
+    const video = document.getElementById('video')
+        // vendorUrl = window.URL || window.webkitURL;
     if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true, facingMode: video.value})
             .then(function (stream) {
