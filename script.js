@@ -9,7 +9,7 @@ const startWebcam = function () {
     const video = document.getElementById('video')
         // vendorUrl = window.URL || window.webkitURL;
     if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true, facingMode: video.value})
+        navigator.mediaDevices.getUserMedia({ video: true, facingMode: "environment"})
             .then(function (stream) {
                 if ('srcObject' in video) {
                     video.srcObject = stream;
