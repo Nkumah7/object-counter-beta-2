@@ -11,7 +11,11 @@ const startWebcam = function () {
     if (navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ video: true, facingMode: video.value})
             .then(function (stream) {
-                video.srcObject = stream;
+                if ('srcObject' in video) {
+                    video.srcObject = stream;
+                } else {
+                    video.src = window.URL.createObjectURL(stream)
+                }                
             }).catch(function (error) {
                 console.log("Something went wrong!");
             });
