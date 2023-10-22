@@ -46,6 +46,7 @@ flipBtn.addEventListener('click', function(){
     });
     // toggle / flip
     shouldFaceUser = !shouldFaceUser;
+    console.log(constraints.video.facingMode)
     capture();
   })
 
