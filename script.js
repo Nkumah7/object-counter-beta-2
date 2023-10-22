@@ -70,10 +70,15 @@ stopBtn.addEventListener("click", () => {
 });
 
 // Event listener to flip camera
-let front = false;
+// let front = false;
 flipBtn.onclick = () => {
-    front = !front; // Switch front boolean value
-    constraints.video.facingMode = front ? "user" : "environment"; // Toggle camera facing mode
+    // front = !front; // Switch front boolean value
+    // constraints.video.facingMode = front ? "user" : "environment"; // Toggle camera facing mode
+    if (constraints.video.facingMode == "user") {
+        constraints.video.facingMode = "environment"
+    } else {
+        constraints.video.facingMode = "user"
+    }
 
     startWebcam(); // Start webcam after flipping camera facing mode
 }; 
