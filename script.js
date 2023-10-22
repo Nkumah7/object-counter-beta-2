@@ -9,10 +9,9 @@ flipBtn.setAttribute("disabled", "");
 
 // Define video constraints
 let constraints = {
-    video: {
-        facingMode: "user", 
-        // width: { min: 1024, ideal: 1280, max: 1920 }, 
-        // height: { min: 576, ideal: 720, max: 1080 },        
+    video: { 
+        width: { min: 1024, ideal: 1280, max: 1920 }, 
+        height: { min: 576, ideal: 720, max: 1080 },        
     },
 };
 
@@ -70,15 +69,17 @@ stopBtn.addEventListener("click", () => {
 });
 
 // Event listener to flip camera
-// let front = false;
+let front = false;
 flipBtn.onclick = () => {
-    // front = !front; // Switch front boolean value
-    // constraints.video.facingMode = front ? "user" : "environment"; // Toggle camera facing mode
-    if (constraints.video.facingMode == "user") {
-        constraints.video.facingMode = "environment"
-    } else {
-        constraints.video.facingMode = "user"
-    }
+    front = !front; // Switch front boolean value
+    constraints.video.facingMode = front ? "user" : "environment"; // Toggle camera facing mode
+    // if (constraints.video.facingMode == "user") {
+    //     constraints.video.facingMode = "environment"
+    // } else {
+    //     constraints.video.facingMode = "user"
+    // }
+
 
     startWebcam(); // Start webcam after flipping camera facing mode
+    console.log(constraints.video.facingMode)
 }; 
