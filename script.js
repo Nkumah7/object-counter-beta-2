@@ -4,42 +4,68 @@ const flipBtn = document.getElementById('flip-btn');
 const videoClass = document.querySelector('.environment');
 const video = document.getElementById('video');
 
-let mode = { exact: videoClass.classList.value };
+let mode = videoClass.classList.value;
+// console.log(mode)
 
 stopBtn.setAttribute("disabled", "");
 flipBtn.setAttribute("disabled", "");
 
+// let constraints = {
+//     audio: false,
+//     video:  {
+//         width: {
+//             min: 1024,
+//             ideal: 1280,
+//             max: 1920,
+//         },
+//         height: {
+//             min: 576,
+//             ideal: 720,
+//             max: 1080
+//         },
+//         facingMode: { exact: mode }
+//     },
+    
+// }
+
+
+// function facingDirection () {
+//     if (navigator.mediaDevices.getUserMedia) {
+//             navigator.mediaDevices.getUserMedia(constraints)
+//                 .then(function (stream) {
+//                     if ('srcObject' in video) {
+//                         video.srcObject = stream;
+//                     } else {
+//                         video.src = window.URL.createObjectURL(stream)
+//                     }                
+//                 }).catch(function (error) {
+//                     console.log("Something went wrong!");
+//         });
+//     };
+// };
+
 let constraints = {
-    audio: false,
-    video:  {
-        width: {
-            min: 1024,
-            ideal: 1280,
-            max: 1920,
-        },
-        height: {
-            min: 576,
-            ideal: 720,
-            max: 1080
-        },
+    video: { 
+        width: 1280, 
+        height: 720        
     },
-    facingMode: {exact: mode}
+};
+
+const startWebcam = function () {
+    constraints.video.facingMode = "environment";
+    navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then((stream) => {
+            video.srcObject = stream;
+            video.onloadedmetadata = () => {
+                video.play();
+        };
+    })
+    .catch((err) => {
+        console.error(`${err.name}: ${err.message}`)
+    });
 }
 
-function facingDirection () {
-    if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia(constraints)
-                .then(function (stream) {
-                    if ('srcObject' in video) {
-                        video.srcObject = stream;
-                    } else {
-                        video.src = window.URL.createObjectURL(stream)
-                    }                
-                }).catch(function (error) {
-                    console.log("Something went wrong!");
-        });
-    };
-};
 
 const stopWebcam = function () {
     const stream = video.srcObject;
@@ -52,8 +78,8 @@ const stopWebcam = function () {
 };
 
 startBtn.addEventListener("click", () => {
-    console.log(mode);
-    facingDirection();    
+    startWebcam();  
+    console.log(constraints.video.facingMode);
     startBtn.setAttribute("disabled", "");
     stopBtn.removeAttribute("disabled");
     flipBtn.removeAttribute("disabled");
@@ -66,16 +92,27 @@ stopBtn.addEventListener("click", () => {
         flipBtn.setAttribute("disabled", "");
 });
 
-flipBtn.addEventListener("click", () => {
-    if (mode.exact == "environment") {
-        mode = "user";       
-    } else {
-        mode = { exact: "environment" };
-    }
-    console.log(mode)
+let front = false;
+flipBtn.onclick = () => {
+    front = !front;
+    constraints.video.facingMode = front ? "user" : "environment";
+    console.log(front);
+    console.log(constraints.video.facingMode)
+    startWebcam();
+};
 
-    facingDirection();
-});
+
+// console.log(constraints)
+// flipBtn.addEventListener("click", () => {
+//     if (mode == "environment") {
+//         mode = "user";       
+//     } else {
+//         mode = "environment";
+//     }
+//     console.log(constraints.video.facingMode.exact);
+
+//     facingDirection();
+// });
 
 
 
