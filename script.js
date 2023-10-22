@@ -11,7 +11,8 @@ flipBtn.setAttribute("disabled", "");
 let constraints = {
     video: { 
         width: { min: 1024, ideal: 1280, max: 1920 }, 
-        height: { min: 576, ideal: 720, max: 1080 },        
+        height: { min: 576, ideal: 720, max: 1080 },  
+        facingMode: "environment",  
     },
 };
 
@@ -24,9 +25,14 @@ const startWebcam = function () {
     navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
-            video.srcObject = stream;
+            if ('srcObject' in video){
+                video.srcObject = stream;
+                
+            } else {
+                video.src = window.URL.createObjectURL(stream)
+            }
             video.onloadedmetadata = () => {
-                video.play();
+                video.play()
         };
     })
     .catch((err) => {
