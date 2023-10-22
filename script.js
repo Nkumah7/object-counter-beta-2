@@ -66,6 +66,7 @@ stopBtn.addEventListener("click", () => {
         flipBtn.setAttribute("disabled", ""); // Disable 'Flip Camera' button
 });
 
+// Event listener to flip camera
 let front = false;
 flipBtn.onclick = () => {
     front = !front; // Switch front boolean value
