@@ -4,8 +4,8 @@ const flipBtn = document.getElementById('flip-btn');
 const video = document.getElementById('video');
 
 // Set a disabled attribute before starting camera
-stopBtn.setAttribute("disabled", "");
-flipBtn.setAttribute("disabled", "");
+// stopBtn.setAttribute("disabled", "");
+// flipBtn.setAttribute("disabled", "");
 
 // Define video constraints
 let constraints = {
@@ -77,17 +77,8 @@ stopBtn.addEventListener("click", () => {
 // Event listener to flip camera
 let front = false;
 flipBtn.onclick = () => {
-    stopWebcam();
+    // stopWebcam();
     front = !front; // Switch front boolean value
     constraints.video.facingMode = front ? "user" : "environment"; // Toggle camera facing mode
-    // if (constraints.video.facingMode == "user") {
-    //     constraints.video.facingMode = "environment"
-    // } else {
-    //     constraints.video.facingMode = "user"
-    // }
-    
-
-    console.log(constraints.video.facingMode)
     startWebcam(); // Start webcam after flipping camera facing mode
-    
 }; 
