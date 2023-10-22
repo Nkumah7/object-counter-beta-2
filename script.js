@@ -61,7 +61,7 @@ startBtn.addEventListener("click", () => {
 
 // Event listener to stop camera
 stopBtn.addEventListener("click", () => {
-    constraints.video.facingMode = "environment"; // Switch camera facing mode back to "environment"
+    // constraints.video.facingMode = "environment"; // Switch camera facing mode back to "environment"
     stopWebcam(); // Stop webcam
 
     startBtn.removeAttribute("disabled"); // Enable 'Start Camera' button
