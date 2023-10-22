@@ -1,35 +1,45 @@
 const startBtn = document.getElementById("start");
 const stopBtn = document.getElementById("stop");
 const flipBtn = document.getElementById('flip-btn');
+const videoClass = document.querySelector('.environment');
+const video = document.getElementById('video');
+
+let mode = { exact: videoClass.classList.value };
+
 stopBtn.setAttribute("disabled", "");
 flipBtn.setAttribute("disabled", "");
 
-
-const startWebcam = function () {
-    const video = document.getElementById('video')
-    if (navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: { facingMode: "environment" }
-        })
-            .then(function (stream) {
-                if ('srcObject' in video) {
-                    video.srcObject = stream;
-                } else {
-                    video.src = window.URL.createObjectURL(stream)
-                }                
-            }).catch(function (error) {
-                console.log("Something went wrong!");
-            });
-    }
+let constraints = {
+    audio: false,
+    video:  {
+        width: {
+            min: 1024,
+            ideal: 1280,
+            max: 1920,
+        },
+        height: {
+            min: 576,
+            ideal: 720,
+            max: 1080
+        },
+    },
+    facingMode: {exact: mode}
 }
-startBtn.addEventListener("click", () => {
-    startWebcam();
-    startBtn.setAttribute("disabled", "");
-    stopBtn.removeAttribute("disabled");
-    flipBtn.removeAttribute("disabled");
-});
 
+function facingDirection () {
+    if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(function (stream) {
+                    if ('srcObject' in video) {
+                        video.srcObject = stream;
+                    } else {
+                        video.src = window.URL.createObjectURL(stream)
+                    }                
+                }).catch(function (error) {
+                    console.log("Something went wrong!");
+        });
+    };
+};
 
 const stopWebcam = function () {
     const stream = video.srcObject;
@@ -39,82 +49,143 @@ const stopWebcam = function () {
         track.stop();
     }
     video.srcObject = null;
-}
+};
+
+startBtn.addEventListener("click", () => {
+    console.log(mode);
+    facingDirection();    
+    startBtn.setAttribute("disabled", "");
+    stopBtn.removeAttribute("disabled");
+    flipBtn.removeAttribute("disabled");
+});
 
 stopBtn.addEventListener("click", () => {
-    stopWebcam();
-    startBtn.removeAttribute("disabled");
-    stopBtn.setAttribute("disabled", "");
-    flipBtn.setAttribute("disabled", "");
+        stopWebcam();
+        startBtn.removeAttribute("disabled");
+        stopBtn.setAttribute("disabled", "");
+        flipBtn.setAttribute("disabled", "");
+});
+
+flipBtn.addEventListener("click", () => {
+    if (mode.exact == "environment") {
+        mode = "user";       
+    } else {
+        mode = { exact: "environment" };
+    }
+    console.log(mode)
+
+    facingDirection();
 });
 
 
 
+
+
+
+
+
+
+// const flipCamera = function () {
+//     let constraints = {audio: false, video: true}
+
+//     if (mode == "user") {
+//         mode = { exact: "environment"}        
+//     } else {
+//         mode = "user"
+//     }
+//     constraints.facingMode = mode
+//     console.log("Flipped", constraints.facingMode)
+//     if (navigator.mediaDevices.getUserMedia) {
+//             navigator.mediaDevices.getUserMedia(constraints)
+//                 .then(function (stream) {
+//                     if ('srcObject' in video) {
+//                         video.srcObject = stream;
+//                     } else {
+//                         video.src = window.URL.createObjectURL(stream)
+//                     }                
+//                 }).catch(function (error) {
+//                     console.log("Something went wrong!");
+//                 });
+//         }    
+// }
+// flipBtn.addEventListener("click", () => {
+//     flipCamera();
+//     // flipBtn.setAttribute("disabled", "");
+//     // startBtn.setAttribute("disabled", "");
+//     // stopBtn.removeAttribute("disabled");    
+// });
+
+// clickedStart();
+// clickedStop();
+
 /* Flip Camera Funtionality */
-const flipWebcam = function () {
-    let on_stream_video = document.getElementById('video');
-    
-    // default user media options
-    let constraints = { audio: false, video: true }
-    let shouldFaceUser = true;
-    
-    // check whether we can use facingMode
-    let supports = navigator.mediaDevices.getSupportedConstraints();
-        if( supports['facingMode'] === true ) {
-        flipBtn.disabled = false;
-    }
+// function clickedFlip() {
+//     const flipCamera = function () {
+//         let on_stream_video = document.getElementById('video');
+        
+//         // default user media options
+//         let constraints = { audio: false, video: true }
+//         let shouldFaceUser = true;
+        
+//         // check whether we can use facingMode
+//         let supports = navigator.mediaDevices.getSupportedConstraints();
+//             if( supports['facingMode'] === true ) {
+//             flipBtn.disabled = false;
+//         }
 
-    let stream = null;    
+//         let stream = null;    
 
-    function capture() {
-        constraints.video = {
-            width: {
-            min: 192,
-            ideal: 192,
-            max: 192,
-        },
-        height: {
-            min: 192,
-            ideal: 192,
-            max: 192
-        },
-        facingMode: shouldFaceUser ? 'user' : 'environment'
-        }
-        console.log(constraints)
-        navigator.mediaDevices.getUserMedia(constraints)
-        .then(function(mediaStream) {
-            stream  = mediaStream;
-            on_stream_video.srcObject = stream;
-            on_stream_video.play();
-        })
-        .catch(function(err) {
-            console.log(err)
-        });
-    }
-    flipBtn.addEventListener('click', function(){
-        if( stream == null ) return
-        // we need to flip, stop everything
-        stream.getTracks().forEach(t => {
-        t.stop();
-    });
-    // toggle / flip
-    shouldFaceUser = !shouldFaceUser;
-    capture();
-    
-    })
+        
+//         constraints.video = {
+//             width: {
+            // min: 1024,
+            // ideal: 1280,
+            // max: 1920,
+//         },
+//         height: {
+            // min: 576,
+            // ideal: 720,
+            // max: 1080
+//         },
+//         facingMode: shouldFaceUser ? 'user' : 'environment'
+//         };
+//         navigator.mediaDevices.getUserMedia(constraints)
+//         .then(function(mediaStream) {
+//             stream  = mediaStream;
+//             on_stream_video.srcObject = stream;
+//             on_stream_video.play();
+//         })
+//         .catch(function(err) {
+//             console.log(err)
+//         });
 
-    capture();
-};
+//         flipBtn.addEventListener('click', function(){
+//             if( stream == null ) return
+//             // we need to flip, stop everything
+//             stream.getTracks().forEach(t => {
+//             t.stop();
+//         });
+//         // toggle / flip
+//         shouldFaceUser = !shouldFaceUser;
+//             // capture();
+            
+//             })
 
-function isFlipped() {
-    flipBtn.addEventListener('click', () => {
-    return true;
-    })
-}
+//         // capture();
+//     };
+// };
+// flipWebcam();
 
-if (isFlipped) {
-    flipWebcam();
-}
+// function isFlipped() {
+//     flipBtn.addEventListener('click', () => {
+//     // return;
+//     })
+// }
+// flipWebcam();
+
+// if (isFlipped) {
+//     flipWebcam();
+// }
 
 
 
