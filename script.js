@@ -1,58 +1,27 @@
 const startBtn = document.getElementById("start");
 const stopBtn = document.getElementById("stop");
 const flipBtn = document.getElementById('flip-btn');
-const videoClass = document.querySelector('.environment');
 const video = document.getElementById('video');
 
-let mode = videoClass.classList.value;
-// console.log(mode)
-
+// Set a disabled attribute before starting camera
 stopBtn.setAttribute("disabled", "");
 flipBtn.setAttribute("disabled", "");
 
-// let constraints = {
-//     audio: false,
-//     video:  {
-//         width: {
-//             min: 1024,
-//             ideal: 1280,
-//             max: 1920,
-//         },
-//         height: {
-//             min: 576,
-//             ideal: 720,
-//             max: 1080
-//         },
-//         facingMode: { exact: mode }
-//     },
-    
-// }
-
-
-// function facingDirection () {
-//     if (navigator.mediaDevices.getUserMedia) {
-//             navigator.mediaDevices.getUserMedia(constraints)
-//                 .then(function (stream) {
-//                     if ('srcObject' in video) {
-//                         video.srcObject = stream;
-//                     } else {
-//                         video.src = window.URL.createObjectURL(stream)
-//                     }                
-//                 }).catch(function (error) {
-//                     console.log("Something went wrong!");
-//         });
-//     };
-// };
-
+// Define video constraints
 let constraints = {
     video: {
         facingMode: "environment", 
-        width: 1280, 
-        height: 720        
+        width: { min: 1024, ideal: 1280, max: 1920 }, 
+        height: { min: 576, ideal: 720, max: 1080 },        
     },
 };
-// constraints.video.facingMode = "environment";
-const startWebcam = function () {    
+
+
+/* Camera Controls */
+
+// Start Camera
+const startWebcam = function () { 
+    /* Function to start webcam */   
     navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
@@ -66,8 +35,9 @@ const startWebcam = function () {
     });
 }
 
-
+// Stop Camera
 const stopWebcam = function () {
+    /* Function to stop camera */
     const stream = video.srcObject;
     let tracks = stream.getTracks();
     for (let i = 0; i < tracks.length; i++) {
@@ -77,199 +47,28 @@ const stopWebcam = function () {
     video.srcObject = null;
 };
 
+
+/* Event Listeners */
+
+// Event listener to start camera
 startBtn.addEventListener("click", () => {
     startWebcam();  
-    console.log(constraints.video.facingMode);
-    startBtn.setAttribute("disabled", "");
-    stopBtn.removeAttribute("disabled");
-    flipBtn.removeAttribute("disabled");
+    startBtn.setAttribute("disabled", ""); // Disable 'Start Camera' button
+    stopBtn.removeAttribute("disabled"); // Enable 'Stop Camera' button
+    flipBtn.removeAttribute("disabled"); // Enable 'Flip Camera' button
 });
 
+// Event listener to stop camera
 stopBtn.addEventListener("click", () => {
         stopWebcam();
-        startBtn.removeAttribute("disabled");
-        stopBtn.setAttribute("disabled", "");
-        flipBtn.setAttribute("disabled", "");
+        startBtn.removeAttribute("disabled"); // Enable 'Start Camera' button
+        stopBtn.setAttribute("disabled", ""); // Disable 'Stop Camera' button
+        flipBtn.setAttribute("disabled", ""); // Disable 'Flip Camera' button
 });
 
 let front = false;
 flipBtn.onclick = () => {
-    front = !front;
-    constraints.video.facingMode = front ? "user" : "environment";    
-    // stopWebcam();
-    startWebcam();
-    console.log(constraints.video.facingMode)
-};
-
-
-// console.log(constraints)
-// flipBtn.addEventListener("click", () => {
-//     if (mode == "environment") {
-//         mode = "user";       
-//     } else {
-//         mode = "environment";
-//     }
-//     console.log(constraints.video.facingMode.exact);
-
-//     facingDirection();
-// });
-
-
-
-
-
-
-
-
-
-// const flipCamera = function () {
-//     let constraints = {audio: false, video: true}
-
-//     if (mode == "user") {
-//         mode = { exact: "environment"}        
-//     } else {
-//         mode = "user"
-//     }
-//     constraints.facingMode = mode
-//     console.log("Flipped", constraints.facingMode)
-//     if (navigator.mediaDevices.getUserMedia) {
-//             navigator.mediaDevices.getUserMedia(constraints)
-//                 .then(function (stream) {
-//                     if ('srcObject' in video) {
-//                         video.srcObject = stream;
-//                     } else {
-//                         video.src = window.URL.createObjectURL(stream)
-//                     }                
-//                 }).catch(function (error) {
-//                     console.log("Something went wrong!");
-//                 });
-//         }    
-// }
-// flipBtn.addEventListener("click", () => {
-//     flipCamera();
-//     // flipBtn.setAttribute("disabled", "");
-//     // startBtn.setAttribute("disabled", "");
-//     // stopBtn.removeAttribute("disabled");    
-// });
-
-// clickedStart();
-// clickedStop();
-
-/* Flip Camera Funtionality */
-// function clickedFlip() {
-//     const flipCamera = function () {
-//         let on_stream_video = document.getElementById('video');
-        
-//         // default user media options
-//         let constraints = { audio: false, video: true }
-//         let shouldFaceUser = true;
-        
-//         // check whether we can use facingMode
-//         let supports = navigator.mediaDevices.getSupportedConstraints();
-//             if( supports['facingMode'] === true ) {
-//             flipBtn.disabled = false;
-//         }
-
-//         let stream = null;    
-
-        
-//         constraints.video = {
-//             width: {
-            // min: 1024,
-            // ideal: 1280,
-            // max: 1920,
-//         },
-//         height: {
-            // min: 576,
-            // ideal: 720,
-            // max: 1080
-//         },
-//         facingMode: shouldFaceUser ? 'user' : 'environment'
-//         };
-//         navigator.mediaDevices.getUserMedia(constraints)
-//         .then(function(mediaStream) {
-//             stream  = mediaStream;
-//             on_stream_video.srcObject = stream;
-//             on_stream_video.play();
-//         })
-//         .catch(function(err) {
-//             console.log(err)
-//         });
-
-//         flipBtn.addEventListener('click', function(){
-//             if( stream == null ) return
-//             // we need to flip, stop everything
-//             stream.getTracks().forEach(t => {
-//             t.stop();
-//         });
-//         // toggle / flip
-//         shouldFaceUser = !shouldFaceUser;
-//             // capture();
-            
-//             })
-
-//         // capture();
-//     };
-// };
-// flipWebcam();
-
-// function isFlipped() {
-//     flipBtn.addEventListener('click', () => {
-//     // return;
-//     })
-// }
-// flipWebcam();
-
-// if (isFlipped) {
-//     flipWebcam();
-// }
-
-
-
-
-// flipBtn.addEventListener('click', () => {
-//     // const cameraToggle = document.querySelector('.camera-toggle')
-//     const cameraToggle = document.querySelector('#video')
-//     console.log(cameraToggle.value)
-    // flipCamera(cameraToggle);
-// })
-// let toggleCamera = document.getElementById("webcam");
-// toggleCamera.addEventListener('click', () => {
-//     toggle(toggleCamera);
-// })
-
-
-
-
-
-
-
-
-
-
-// function toggle(btn) {
-//     if (btn.value == "start") {
-//         btn.value = "stop";
-//         btn.classList.remove("btn-success");
-//         btn.classList.add("btn-danger");
-//         btn.innerText = "Stop Camera";
-//         start();
-//     } else {
-//         btn.value = "start";
-//         btn.classList.remove("btn-danger");
-//         btn.classList.add("btn-success");
-//         btn.innerText = "Start Camera";
-//         stop();
-//     }
-// }
-
-// function toggleCamera(mode) {
-//     if (mode == "user") {
-//         return "environment"
-//     } else {
-//         return "user"
-//     }
-// }
-
-
-
+    front = !front; // Switch front boolean value
+    constraints.video.facingMode = front ? "user" : "environment"; // Toggle camera facing mode
+    startWebcam(); // Start webcam after flipping camera facing mode
+}; 
