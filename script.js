@@ -3,10 +3,6 @@ const stopBtn = document.getElementById("stop");
 const flipBtn = document.getElementById('flip-btn');
 const video = document.getElementById('video');
 
-// Set a disabled attribute before starting camera
-// stopBtn.setAttribute("disabled", "");
-// flipBtn.setAttribute("disabled", "");
-
 // Define video constraints
 let constraints = {
     video: { 
@@ -77,8 +73,10 @@ stopBtn.addEventListener("click", () => {
 // Event listener to flip camera
 let front = false;
 flipBtn.onclick = () => {
-    // stopWebcam();
+    stopWebcam(); // Stop webcam before flipping camera facing mode
+
     front = !front; // Switch front boolean value
     constraints.video.facingMode = front ? "user" : "environment"; // Toggle camera facing mode
+
     startWebcam(); // Start webcam after flipping camera facing mode
 }; 
