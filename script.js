@@ -53,6 +53,7 @@ const stopWebcam = function () {
 // Event listener to start camera
 startBtn.addEventListener("click", () => {
     startWebcam();  
+
     startBtn.setAttribute("disabled", ""); // Disable 'Start Camera' button
     stopBtn.removeAttribute("disabled"); // Enable 'Stop Camera' button
     flipBtn.removeAttribute("disabled"); // Enable 'Flip Camera' button
@@ -60,10 +61,12 @@ startBtn.addEventListener("click", () => {
 
 // Event listener to stop camera
 stopBtn.addEventListener("click", () => {
-        stopWebcam();
-        startBtn.removeAttribute("disabled"); // Enable 'Start Camera' button
-        stopBtn.setAttribute("disabled", ""); // Disable 'Stop Camera' button
-        flipBtn.setAttribute("disabled", ""); // Disable 'Flip Camera' button
+    constraints.video.facingMode = "environment"; // Switch camera facing mode back to "environment"
+    stopWebcam(); // Stop webcam
+
+    startBtn.removeAttribute("disabled"); // Enable 'Start Camera' button
+    stopBtn.setAttribute("disabled", ""); // Disable 'Stop Camera' button
+    flipBtn.setAttribute("disabled", ""); // Disable 'Flip Camera' button
 });
 
 // Event listener to flip camera
@@ -71,5 +74,6 @@ let front = false;
 flipBtn.onclick = () => {
     front = !front; // Switch front boolean value
     constraints.video.facingMode = front ? "user" : "environment"; // Toggle camera facing mode
+
     startWebcam(); // Start webcam after flipping camera facing mode
 }; 
