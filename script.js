@@ -95,10 +95,9 @@ stopBtn.addEventListener("click", () => {
 let front = false;
 flipBtn.onclick = () => {
     front = !front;
-    constraints.video.facingMode = front ? "user" : "environment";
-    console.log(front);
+    constraints.video.facingMode = front ? "user" : "environment";    
+    // startWebcam();
     console.log(constraints.video.facingMode)
-    startWebcam();
 };
 
 
