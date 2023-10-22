@@ -45,14 +45,14 @@ flipBtn.setAttribute("disabled", "");
 // };
 
 let constraints = {
-    video: { 
+    video: {
+        facingMode: "environment", 
         width: 1280, 
         height: 720        
     },
 };
-
-const startWebcam = function () {
-    constraints.video.facingMode = "environment";
+// constraints.video.facingMode = "environment";
+const startWebcam = function () {    
     navigator.mediaDevices
         .getUserMedia(constraints)
         .then((stream) => {
@@ -96,7 +96,8 @@ let front = false;
 flipBtn.onclick = () => {
     front = !front;
     constraints.video.facingMode = front ? "user" : "environment";    
-    // startWebcam();
+    // stopWebcam();
+    startWebcam();
     console.log(constraints.video.facingMode)
 };
 
