@@ -14,6 +14,8 @@
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.7.0/dist/tf.min.js" defer></script>
+    <script type="module" src="script.js" defer></script>
 </head>
 
 <body>
@@ -28,10 +30,11 @@
                         <div class="booth">
                             <video id="video" class="environment" autoplay>
                             </video>
+                            <canvas id="detection"></canvas>
                         </div>
 
                         <div class="text-right">
-                            <button id="start" value="start" class="btn btn-success">
+                            <button disabled id="start" value="start" class="btn btn-success">
                                 Start Camera
                             </button>
                             <button disabled id="stop" value="stop" class="btn btn-danger">
@@ -46,8 +49,6 @@
             </div>
         </div>
     </div>
-
-    <script src="script.js"></script>
 </body>
 
 </html>
